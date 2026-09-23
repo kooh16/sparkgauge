@@ -59,6 +59,19 @@ always add up to `MemTotal`.
 
 ## Install
 
+### Prebuilt binary
+
+Download the `linux-aarch64` archive from the
+[latest release](https://github.com/kooh16/sparkgauge/releases/latest), then:
+
+```sh
+tar xzf sparkgauge-*-linux-aarch64.tar.gz
+cd sparkgauge-*-linux-aarch64
+./install.sh
+```
+
+### From source
+
 You need a Rust toolchain (1.88 or newer, from [rustup.rs](https://rustup.rs))
 and the NVIDIA driver, which DGX OS already ships.
 
@@ -68,7 +81,8 @@ cd sparkgauge
 ./install.sh
 ```
 
-`install.sh` builds a release binary and installs it for your user only:
+`install.sh` installs SparkGauge for your user only — from the source tree it
+builds the binary first:
 the binary goes to `~/.local/bin`, and an icon and launcher entry go under
 `~/.local/share`. SparkGauge then appears among your applications.
 

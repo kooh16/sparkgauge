@@ -1,0 +1,40 @@
+name: Release
+
+# Pushing a tag such as v0.1.0 builds the aarch64 binary and publishes a
+# GitHub release with it, using the notes of that version in CHANGELOG.md.
+on:
+  push:
+    tags: ["v*"]
+
+permissions:
+  contents: write
+
+env:
+  CARGO_TERM_COLOR: always
+
+jobs:
+  release:
+    runs-on: ubuntu-24.04-arm
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
+      - run: cargo test --locked
+      - run: cargo build --release --locked
+      - name: Package
+        run: |
+          version="${GITHUB_REF_NAME#v}"
+          test "$version" = "$(cargo pkgid | sed 's/.*[#@]//')" || { echo "tag does not match Cargo.toml version"; exit 1; }
+          dir="sparkgauge-$version-linux-aarch64"
+          mkdir -p "$dir/assets" "$dir/packaging"
+          cp target/release/sparkgauge install.sh LICENSE README.md CHANGELOG.md "$dir/"
+          cp assets/sparkgauge.svg "$dir/assets/"
+          cp packaging/sparkgauge.desktop "$dir/packaging/"
+          tar czf "$dir.tar.gz" "$dir"
+          sha256sum "$dir.tar.gz" > "$dir.tar.gz.sha256"
+          # Release notes: the section of CHANGELOG.md for this version.
+          awk -v v="$version" '$0 ~ "^## " v " " {on=1; next} /^## /{on=0} on' CHANGELOG.md > notes.md
+          echo "DIR=$dir" >> "$GITHUB_ENV"
+      - name: Publish
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh release create "$GITHUB_REF_NAME" "$DIR.tar.gz" "$DIR.tar.gz.sha256" --title "SparkGauge $GITHUB_REF_NAME" --notes-file notes.md

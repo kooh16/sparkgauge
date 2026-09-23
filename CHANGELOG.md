@@ -1,6 +1,6 @@
 # Changelog
 
-## 0.1.0 — unreleased
+## 0.1.0 — 2026-09-23
 
 First version.
 
@@ -12,3 +12,8 @@ First version.
   Cortex-A725 on the GB10), cluster frequencies and SoC temperature.
 - Network and disk throughput over physical devices only.
 - One-minute and five-minute history, hover read-outs on every chart.
+
+Download `sparkgauge-0.1.0-linux-aarch64.tar.gz`, extract it and run
+`./install.sh`: the prebuilt binary is installed for your user, with an icon
+and a launcher entry. Built on Ubuntu 24.04 for aarch64, so it runs on DGX OS
+and other recent distributions of the GB10 machines.
