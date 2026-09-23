@@ -1,0 +1,11 @@
+[Desktop Entry]
+Type=Application
+Name=SparkGauge
+GenericName=System Monitor
+Comment=CPU, GPU and unified memory of NVIDIA GB10 machines
+Exec=sparkgauge
+Icon=sparkgauge
+Terminal=false
+Categories=System;Monitor;
+Keywords=gpu;cpu;memory;nvidia;gb10;dgx;spark;monitor;
+StartupWMClass=sparkgauge
